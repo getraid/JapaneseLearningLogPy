@@ -1,4 +1,4 @@
-# Webcommand Center
+# Japanese Learning Log Py
 
 Required / Programmed with: Python 3.9
 
