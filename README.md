@@ -3,7 +3,7 @@
 Required / Programmed with: Python 3.9
 
 ## Setup 
-Clone the repository to your server with `git clone http://codeserver/rapidraid/JapaneseLearningLog.git`
+Clone the repository to your server with `git clone http://codeserver/rapidraid/JapaneseLearningLogPy.git`
 Install all dependencies: `pip3 install -r requirements.txt`
 
 Start: `python3 start.py`
@@ -31,8 +31,6 @@ Now open your webbrowser at your defined host:port in the settings (default:  `h
 [To be continued]
 
 ## Development
-To fully fetch the project with the web-gui sources, use `git clone http://codeserver/rapidraid/JapaneseLearningLog.git --recurse-submodule` to fully clone the submodule as well.
-
 To work on the gui check out JapaneseLearningLogFrontend. 
 Before that, you should disable the `usePassword` option in the `config.ini` file. 
 
