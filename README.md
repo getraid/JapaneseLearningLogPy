@@ -6,6 +6,7 @@ Required / Programmed with: Python 3.9
 Clone the repository to your server with `git clone http://codeserver/rapidraid/JapaneseLearningLogPy.git`
 Install all dependencies: `pip3 install -r requirements.txt`
 
+Build depedencies: execute the `installAndBuild.bat`(Windows) or `./installAndBuild.sh`(Linux in Terminal) to build the frontend
 Start: `python3 start.py`
 
 To run this in the background on a Linux server, please look into [services](https://www.google.com/search?q=linux+setup+service).
