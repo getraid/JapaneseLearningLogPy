@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" class="defaultFont min-h-screen bg-gray-400">
     <StartPage></StartPage>
   </div>
 </template>
@@ -10,17 +10,13 @@ export default {
   name: "App",
   components: { StartPage },
   data() {
-    return {
-      output: ""
-    };
+    return {};
   },
-  mounted() {
-    this.axios.get("http://localhost:5000/commands").then(response => {
-      console.log(response.data);
-      this.output = response.data;
-    });
-  }
 };
 </script>
 
-<style></style>
+<style>
+.defaultFont {
+  font-family: "Open Sans", Arial, sans-serif;
+}
+</style>

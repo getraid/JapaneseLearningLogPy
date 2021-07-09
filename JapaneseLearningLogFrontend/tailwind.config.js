@@ -7,14 +7,15 @@ module.exports = {
   theme: {
     extend: {},
 
-    backgroundColor: theme => ({
+    backgroundColor: (theme) => ({
       ...theme("colors"),
-      jlOrange: "#DF7323"
+      jlOrange: "#DF7323",
     }),
-    colors: {
-      jLDark: "#2E2E2E"
-    }
+    color: (colors) => ({
+      ...colors("colors"),
+      jLDark: "#2E2E2E",
+    }),
   },
   variants: {},
-  plugins: []
+  plugins: [],
 };

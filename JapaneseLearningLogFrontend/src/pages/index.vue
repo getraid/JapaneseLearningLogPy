@@ -1,5 +1,5 @@
 <template>
-  <div class="defaultFont">
+  <div>
     <nav
       class=" flex flex-col text-center content-center sm:flex-row sm:text-left sm:justify-between py-2 px-6 bg-jlOrange shadow sm:items-baseline w-full"
     >
@@ -28,21 +28,19 @@
       </div>
     </nav>
 
-    <div class="flex flex-row">
-      <p class="description">Hello World</p>
+    <div class="flex flex-col lg:flex-row row-gap-2 col-gap-2">
+      <ListLogs />
+      <div class="w-24 h-24 bg-red-200 my-1"></div>
+      <div class="w-24 h-24 bg-red-200 my-1"></div>
     </div>
   </div>
 </template>
 
 <script>
-// import BigButton from "../components/BigButton.vue";
+import ListLogs from "../components/ListLogs.vue";
 export default {
-  // components: { BigButton }
+  components: { ListLogs },
 };
 </script>
 
-<style lang="postcss">
-.defaultFont {
-  font-family: "Open Sans", Arial, sans-serif;
-}
-</style>
+<style lang="postcss"></style>
