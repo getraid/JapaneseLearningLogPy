@@ -1,5 +1,5 @@
 <template>
-  <div id="app" class="defaultFont min-h-screen bg-gray-400">
+  <div id="app" class="defaultFont min-h-screen bg-jlBase">
     <StartPage></StartPage>
   </div>
 </template>

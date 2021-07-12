@@ -1,9 +1,9 @@
 <template>
   <div>
     <nav
-      class=" flex flex-col text-center content-center sm:flex-row sm:text-left sm:justify-between py-2 px-6 bg-jlOrange shadow sm:items-baseline w-full"
+      class=" flex flex-col content-center lg:flex-row lg:text-left lg:justify-between lg:py-2 py-1 lg:px-6 px-2 bg-jlOrange shadow lg:items-baseline w-full"
     >
-      <div class="mb-2 sm:mb-0 flex flex-row">
+      <div class="mb-2 lg:mb-0 flex flex-row">
         <div class="h-12 w-12 self-center mr-2">
           <img class="h-12 w-12 self-center" src="../assets/logo.svg" />
         </div>
@@ -28,10 +28,14 @@
       </div>
     </nav>
 
-    <div class="flex flex-col lg:flex-row row-gap-2 col-gap-2">
-      <ListLogs />
-      <div class="w-24 h-24 bg-red-200 my-1"></div>
-      <div class="w-24 h-24 bg-red-200 my-1"></div>
+    <div class="flex lg:flex-row  flex-col  row-gap-2 col-gap-4 sm:mx0 mx-5">
+      <div>
+        <ListLogs />
+      </div>
+      <div class="flex flex-col row-gap-4 col-gap-2 lg:py-2 py-0">
+        <div class="w-24 h-24 bg-jlStackBg  "></div>
+        <div class="w-24 h-24 bg-jlStackBg  "></div>
+      </div>
     </div>
   </div>
 </template>
