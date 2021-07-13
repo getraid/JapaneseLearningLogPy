@@ -35,7 +35,7 @@
       <br />
     </div>
     <div
-      class="bg-jlStackBg mt-10 pt-2 px-5 pb-2 rounded-lg z-50  relative lowerShadow"
+      class="bg-jlStackBg mt-10 pt-2 pb-2 rounded-lg z-50  relative lowerShadow px-6 min-w-full"
     >
       <div v-if="currentDates !== null">
         <div v-for="(item, index) in currentDates" :key="index">
@@ -66,27 +66,12 @@ export default {
       allDates: null,
       currentDates: null,
       currentDatesIndex: 0,
-      selectedIndex: null
+      selectedIndex: null,
     };
   },
   mounted() {
-    this.axios.get("/logs").then(response => {
-      var convertedDates = [];
-
-      response.data.forEach(element => {
-        var tmpD = Date.parse(element.dateObj.split(", ")[1]);
-
-        element.dateObj = this.timeConverter(tmpD);
-        convertedDates.push(element);
-      });
-
-      this.allDates = convertedDates;
-      for (let i = 0; i < 20; i++) {
-        this.allDates.push(this.allDates[0]);
-      }
-      this.fillCurrentDates();
-
-      this.selectedIndex = 0;
+    this.axios.get("/logs").then((response) => {
+      this.setupLogs(response);
     });
     // maybe convienient if added on startup?
     // this.AddNewDate();
@@ -97,7 +82,7 @@ export default {
       return Array.from(
         Array(Math.ceil(this.allDates.length / this.itemsPerRow)).keys()
       );
-    }
+    },
   },
   methods: {
     ClickDate(index) {
@@ -105,10 +90,12 @@ export default {
       this.$emit("selectedItem", this.currentDates[this.selectedIndex]);
     },
     AddNewDate() {
-      this.axios.get("/addLog").then(response => {
+      this.axios.get("/addLog").then((response) => {
         if (response.data == "dateAlreadyExist") return;
-        console.log(response.data);
-        this.allDates = response.data;
+        this.setupLogs(response);
+        this.currentDatesIndex = 0;
+        this.selectedIndex = 0;
+        this.fillCurrentDates();
       });
     },
 
@@ -135,6 +122,22 @@ export default {
         }
       }
     },
+    setupLogs(response) {
+      var convertedDates = [];
+
+      response.data.forEach((element) => {
+        var tmpD = Date.parse(element.dateObj.split(", ")[1]);
+
+        element.dateObj = this.timeConverter(tmpD);
+        convertedDates.push(element);
+      });
+
+      this.allDates = convertedDates;
+
+      this.fillCurrentDates();
+
+      this.selectedIndex = 0;
+    },
 
     timeConverter(UNIX_timestamp) {
       var a = new Date(UNIX_timestamp);
@@ -144,18 +147,11 @@ export default {
           weekday: "long",
           year: "numeric",
           month: "2-digit",
-          day: "2-digit"
+          day: "2-digit",
         }
       );
-      // var time =
-      //   String(a.getDate()).padStart(2, "0") +
-      //   " " +
-      //   String(a.getMonth()).padStart(2, "0") +
-      //   " " +
-      //   a.getFullYear();
-      // return time;
-    }
-  }
+    },
+  },
 };
 </script>
 
