@@ -10,12 +10,14 @@
         <p>+</p>
       </div>
       <div
-        class="w-4 h-4 mx-2 bg-gray-500 rounded-full flex justify-center items-center float-right text-sm"
+        class="w-4 h-4 mx-2 bg-gray-500 rounded-full flex justify-center items-center float-right text-sm  text-center cursor-pointer"
+        @click="ShowModal()"
       >
         <p>*</p>
       </div>
       <div
-        class="w-4 h-4  bg-red-500 rounded-full flex justify-center items-center float-right"
+        class="w-4 h-4  bg-red-500 rounded-full flex justify-center items-center float-right text-center cursor-pointer"
+        @click="DeleteSelectedLog()"
       >
         <p>-</p>
       </div>
@@ -34,8 +36,9 @@
       </div>
       <br />
     </div>
+
     <div
-      class="bg-jlStackBg mt-10 pt-2 pb-2 rounded-lg z-50  relative lowerShadow px-6 min-w-full"
+      class="bg-jlStackBg mt-10 pt-2 pb-2 rounded-lg z-20  relative lowerShadow px-6 min-w-full"
     >
       <div v-if="currentDates !== null">
         <div v-for="(item, index) in currentDates" :key="index">
@@ -54,12 +57,29 @@
         No dates exisiting.<br />Please create some by pressing the plus icon
       </div>
     </div>
-    <div class=""></div>
+    <Modal ref="modDate">
+      <date-picker
+        class="w-full lg:mt-0 mt-2"
+        v-model="time"
+        valueType="format"
+      ></date-picker>
+      <div
+        class="cursor-pointer text-center lg:mt-1 mt-4 bg-yellow-200 hover:bg-yellow-500 rounded-md shadow-md"
+        @click="SubmitCustomDate()"
+      >
+        <p>Add date</p>
+      </div></Modal
+    >
   </div>
 </template>
 
 <script>
+import Modal from "./GeneralComponents/Modal.vue";
+import DatePicker from "vue2-datepicker";
+import "vue2-datepicker/index.css";
+
 export default {
+  components: { Modal, DatePicker },
   data() {
     return {
       itemsPerRow: 7,
@@ -67,10 +87,11 @@ export default {
       currentDates: null,
       currentDatesIndex: 0,
       selectedIndex: null,
+      time: null
     };
   },
   mounted() {
-    this.axios.get("/logs").then((response) => {
+    this.axios.get("/logs").then(response => {
       this.setupLogs(response);
     });
     // maybe convienient if added on startup?
@@ -82,7 +103,7 @@ export default {
       return Array.from(
         Array(Math.ceil(this.allDates.length / this.itemsPerRow)).keys()
       );
-    },
+    }
   },
   methods: {
     ClickDate(index) {
@@ -90,13 +111,38 @@ export default {
       this.$emit("selectedItem", this.currentDates[this.selectedIndex]);
     },
     AddNewDate() {
-      this.axios.get("/addLog").then((response) => {
-        if (response.data == "dateAlreadyExist") return;
-        this.setupLogs(response);
-        this.currentDatesIndex = 0;
-        this.selectedIndex = 0;
-        this.fillCurrentDates();
+      this.axios.get("/addLog").then(response => {
+        this.RefreshLogs(response);
       });
+    },
+    ShowModal() {
+      this.$refs.modDate.modalVisible = !this.$refs.modDate.modalVisible;
+    },
+
+    SubmitCustomDate() {
+      if (this.time == null) {
+        return;
+      }
+
+      this.axios.get("/addLog?manual=" + this.time).then(response => {
+        this.RefreshLogs(response);
+      });
+    },
+
+    DeleteSelectedLog() {
+      this.axios
+        .get("/deleteLog?logid=" + this.currentDates[this.selectedIndex].id)
+        .then(response => {
+          this.RefreshLogs(response);
+        });
+    },
+
+    RefreshLogs(response) {
+      if (response.data == "dateAlreadyExist") return;
+      this.setupLogs(response);
+      this.currentDatesIndex = 0;
+      this.selectedIndex = 0;
+      this.fillCurrentDates();
     },
 
     nextCurrentDates(decrement) {
@@ -125,7 +171,7 @@ export default {
     setupLogs(response) {
       var convertedDates = [];
 
-      response.data.forEach((element) => {
+      response.data.forEach(element => {
         var tmpD = Date.parse(element.dateObj.split(", ")[1]);
 
         element.dateObj = this.timeConverter(tmpD);
@@ -137,6 +183,7 @@ export default {
       this.fillCurrentDates();
 
       this.selectedIndex = 0;
+      this.$emit("selectedItem", this.currentDates[this.selectedIndex]);
     },
 
     timeConverter(UNIX_timestamp) {
@@ -147,11 +194,11 @@ export default {
           weekday: "long",
           year: "numeric",
           month: "2-digit",
-          day: "2-digit",
+          day: "2-digit"
         }
       );
-    },
-  },
+    }
+  }
 };
 </script>
 

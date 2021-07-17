@@ -32,8 +32,8 @@
       <div>
         <ListLogs v-on:selectedItem="debSel" />
       </div>
-      <div class="flex flex-col row-gap-4 col-gap-2 lg:py-2 py-0">
-        <ListPosts />
+      <div class="flex flex-col row-gap-4 col-gap-2 lg:py-2 py-0 flex-grow">
+        <ListPosts :logId="selectedLog" />
         <PropertiesDefiner />
       </div>
     </div>
@@ -44,11 +44,18 @@
 import ListLogs from "../components/ListLogs.vue";
 import ListPosts from "../components/ListPosts.vue";
 import PropertiesDefiner from "../components/PropertiesDefiner.vue";
+
 export default {
   components: { ListLogs, ListPosts, PropertiesDefiner },
+  data() {
+    return {
+      selectedLog: 0
+    };
+  },
   methods: {
     debSel(e) {
-      console.log(e);
+      console.log(e.id);
+      this.selectedLog = e.id;
     }
   }
 };
