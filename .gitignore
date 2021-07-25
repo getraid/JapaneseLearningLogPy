@@ -1,6 +1,7 @@
 # custom
 database.db
 config.ini
+export/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
