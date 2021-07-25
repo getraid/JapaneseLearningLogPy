@@ -4,6 +4,7 @@ from enum import unique
 from os import waitpid
 from flask import Flask, jsonify, request
 import flask
+from flask.globals import session
 from flask_sqlalchemy import SQLAlchemy
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
@@ -109,10 +110,30 @@ def logs():
     return jsonify(logentries)
 
 
+@app.route("/totalTime")
+def totalTime():
+    if(not isLoggedIn() and checkPassReq()):
+        return flask.redirect('/login')
+
+    logid = request.args.get('logid', default=0, type=int)
+    if(logid):
+
+        results = (db.session.query(Post.id, Post.log_FK_id, Post.elapsedTime,
+                                    Post.learnMethod, Post.comment).join(LogEntry).filter(LogEntry.id == logid)).all()
+        row_as_dict = []
+        totaltime = 0
+        for row in results:
+            try:
+                totaltime += int(row.elapsedTime)
+            except:
+                return "One or more elapsedTime seems wrong"
+        return str(totaltime)
+    else:
+        return "no log id given"
+
+
 # creates a new entry for current date. use '/addLog?manual=YYYY-MM-DD' to insert already past days
 # also catch "dateAlreadyExist", when a day already exists
-
-
 @app.route("/addLog")
 def addLog():
     if(not isLoggedIn() and checkPassReq()):
@@ -144,11 +165,11 @@ def addLog():
     return jsonify(logentries)
 
 
-# link logs with /addPost?logid=<id>. Yes, I know, shoud've used post req - whatever
-@app.route("/addPost", methods=['GET', 'POST'])
+@app.route("/addPost", methods=['GET', 'POST', 'PATCH'])
 def addPost():
     if(not isLoggedIn() and checkPassReq()):
         return flask.redirect('/login')
+
     if request.method == 'POST':
         if(request.form['logid']):
             logid = request.form['logid']
@@ -176,6 +197,25 @@ def addPost():
             return jsonify(row_as_dict)
 
         return jsonify("no id was given")
+    elif request.method == 'PATCH':
+        if(request.form['id']):
+            id = request.form['id']
+            logid = request.form['logid']
+            elapsedTime = request.form['elapsedTime']
+            learnMethod = request.form['learnMethod']
+            comment = request.form['comment']
+            # find element
+            element = Post.query.get(id)
+
+            if(element):
+                element.log_FK_id = logid
+                element.elapsedTime = elapsedTime
+                element.learnMethod = learnMethod
+                element.comment = comment
+                db.session.add(element)
+                db.session.commit()
+
+            return "OK"
     else:
         return "Use post request"
 
@@ -199,8 +239,33 @@ def getPosts():
     return jsonify(row_as_dict)
 
 
-@app.route("/deleteLog")
+@app.route("/deletePost")
 def deleteLog():
+    if(not isLoggedIn() and checkPassReq()):
+        return flask.redirect('/login')
+
+    postid = request.args.get('id', default=0, type=int)
+    if(postid == 0):
+        return "no post id was passed"
+    else:
+        logs = Post.query.all()
+        for item in logs:
+            if(item.id == postid):
+                db.session.delete(item)
+                db.session.commit()
+
+                results = (db.session.query(Post.id, Post.log_FK_id, Post.elapsedTime,
+                           Post.learnMethod, Post.comment).join(LogEntry).filter(LogEntry.id == item.log_FK_id)).all()
+                row_as_dict = []
+                for row in results:
+                    row_as_dict.append(dict(row))
+                return jsonify(row_as_dict)
+
+    return "no item to be deleted"
+
+
+@app.route("/deleteLog")
+def deletePost():
     if(not isLoggedIn() and checkPassReq()):
         return flask.redirect('/login')
 
