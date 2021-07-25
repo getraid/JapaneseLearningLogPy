@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from datetime import datetime
+from datetime import date, datetime
 from enum import unique
 from os import waitpid
 from flask import Flask, jsonify, request
@@ -12,7 +12,7 @@ import time
 import configparser
 import random
 from werkzeug.utils import redirect
-
+from flask import send_file
 from sqlalchemy import Table, Column, Integer, ForeignKey, desc
 from sqlalchemy.orm import relationship
 
@@ -262,6 +262,26 @@ def deleteLog():
                 return jsonify(row_as_dict)
 
     return "no item to be deleted"
+
+
+@app.route("/export")
+def export():
+    if(not isLoggedIn() and checkPassReq()):
+        return flask.redirect('/login')
+
+    import csv
+    x = date.today()
+    currentDate = str(x)
+    filename = 'JapaneseLogExport-'+currentDate+'.csv'
+    outfile = open('export/'+filename, 'w', newline='')
+    outcsv = csv.writer(outfile)
+    records = db.engine.execute(
+        "SELECT substr(dateObj, 0,11) as date , elapsedTime, learnMethod, comment from post, logentry where logentry.id == post.log_FK_id order by date")
+    # [outcsv.writerow([getattr(curr, column.name) for column in MyTable.__mapper__.columns]) for curr in records]
+    outcsv.writerows(records)
+
+    outfile.close()
+    return send_file('./export/'+filename, as_attachment=True)
 
 
 @app.route("/deleteLog")
