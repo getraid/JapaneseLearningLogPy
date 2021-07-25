@@ -9,7 +9,12 @@
         v-for="(item, index) in posts"
         :key="index"
       >
-        <div class="bg-jlOrange text-center py-8 rounded-md">
+        <div
+          v-if="posts !== null"
+          :class="selectedIndex == index ? 'bg-jlOrange' : 'bg-jlItemBg'"
+          class=" hover:bg-orange-300 text-center py-8 rounded-md cursor-pointer"
+          @click="ClickPost(index)"
+        >
           {{ item.learnMethod }}
         </div>
       </div>
@@ -20,16 +25,12 @@
       >
         <div
           class="customColor hover:bg-jlOrange  py-6  rounded-md border-2 border-orange-500 text-center flex flex-col items-center cursor-pointer"
-          @click="
-            () => {
-              this.posts.push(this.posts[0]);
-            }
-          "
+          @click="AddNewPost()"
         >
           <div
             class="rounded-full w-8 h-8 bg-yellow-600 hover:customColor text-center self-center"
           >
-            <p>+</p>
+            <PlusIcon size="2x" />
           </div>
         </div>
       </div>
@@ -39,14 +40,18 @@
 
 <script>
 import BoxElement from "./GeneralComponents/BoxElement.vue";
+
+import { PlusIcon } from "@vue-hero-icons/outline";
+
 export default {
-  components: { BoxElement },
+  components: { BoxElement, PlusIcon },
 
   data() {
     return {
       currentSelectedPost: 0,
       posts: [],
-      isLoading: true
+      isLoading: true,
+      selectedIndex: 0
     };
   },
   props: {
@@ -56,8 +61,10 @@ export default {
   watch: {
     // eslint-disable-next-line
     logId: function(newVal, oldVal) {
-      console.log(newVal);
       this.FetchPosts(newVal);
+    }, // eslint-disable-next-line
+    selectedIndex: function(newVal, oldVal) {
+      this.EmitPost(newVal);
     }
   },
   methods: {
@@ -67,10 +74,38 @@ export default {
       this.axios.get("/getPosts?logid=" + logid).then(response => {
         this.posts = response.data;
         this.isLoading = false;
-        //  this.setupLogs(response);
-        //     this.currentDatesIndex = 0;
-        //     this.selectedIndex = 0;
-        //     this.fillCurrentDates();
+
+        this.selectedIndex = 0;
+      });
+    },
+
+    ClickPost(index) {
+      this.selectedIndex = index;
+    },
+
+    EmitPost(index) {
+      this.$emit("selectedPost", this.posts[index]);
+    },
+
+    AddNewPost() {
+      this.posts = [];
+      this.isLoading = true;
+
+      const params = new URLSearchParams();
+      params.append("logid", this.logId);
+      params.append("elapsedTime", 0);
+      params.append("learnMethod", "New Post");
+      params.append("comment", "");
+
+      const config = {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded"
+        }
+      };
+      this.axios.post("/addPost", params, config).then(response => {
+        this.posts = response.data;
+        this.isLoading = false;
+        this.selectedIndex = this.posts.length - 1;
       });
     }
   }

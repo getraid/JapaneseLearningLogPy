@@ -30,11 +30,11 @@
 
     <div class="flex lg:flex-row  flex-col  row-gap-2 col-gap-4 sm:mx0 mx-5">
       <div>
-        <ListLogs v-on:selectedItem="debSel" />
+        <ListLogs v-on:selectedItem="ChangeLog" />
       </div>
       <div class="flex flex-col row-gap-4 col-gap-2 lg:py-2 py-0 flex-grow">
-        <ListPosts :logId="selectedLog" />
-        <PropertiesDefiner />
+        <ListPosts :logId="selectedLogId" v-on:selectedPost="ChangePost" />
+        <PropertiesDefiner :postObj="selectedPost" />
       </div>
     </div>
   </div>
@@ -49,13 +49,16 @@ export default {
   components: { ListLogs, ListPosts, PropertiesDefiner },
   data() {
     return {
-      selectedLog: 0
+      selectedLogId: 0,
+      selectedPost: null
     };
   },
   methods: {
-    debSel(e) {
-      console.log(e.id);
-      this.selectedLog = e.id;
+    ChangeLog(e) {
+      this.selectedLogId = e.id;
+    },
+    ChangePost(e) {
+      this.selectedPost = e;
     }
   }
 };

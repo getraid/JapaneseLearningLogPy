@@ -4,35 +4,35 @@
       class="bg-jlBase -mt-8 py-2 px-5 w100 inline-block rounded-lg z-10  absolute upperShadow"
     >
       <div
-        class="w-4 h-4 bg-green-400 hover:bg-green-500 rounded-full flex justify-center items-center float-right  text-center cursor-pointer"
+        class="w-4 h-4 bg-green-500 hover:bg-green-600 rounded-full flex justify-center items-center float-right  text-center cursor-pointer"
         @click="AddNewDate()"
       >
-        <p>+</p>
+        <PlusIcon size="0.75x" />
       </div>
       <div
-        class="w-4 h-4 mx-2 bg-gray-500 rounded-full flex justify-center items-center float-right text-sm  text-center cursor-pointer"
+        class="w-4 h-4 mx-2 bg-blue-400 hover:bg-blue-500 rounded-full flex justify-center items-center float-right text-sm  text-center cursor-pointer"
         @click="ShowModal()"
       >
-        <p>*</p>
+        <PencilIcon size="0.75x" />
       </div>
       <div
-        class="w-4 h-4  bg-red-500 rounded-full flex justify-center items-center float-right text-center cursor-pointer"
+        class="w-4 h-4  bg-red-400 hover:bg-red-500 rounded-full flex justify-center items-center float-right text-center cursor-pointer"
         @click="DeleteSelectedLog()"
       >
-        <p>-</p>
+        <XIcon size="0.75x" />
       </div>
       <div
-        class="w-4 h-4 mr-2  bg-red-500 rounded-full flex justify-center items-center float-left text-center cursor-pointer"
+        class="w-4 h-4 mr-2  bg-gray-500 rounded-full flex justify-center items-center float-left text-center cursor-pointer"
         @click="nextCurrentDates(true)"
       >
-        <p>⏮</p>
+        <ArrowLeftIcon size="0.75x" />
       </div>
 
       <div
-        class="w-4 h-4  bg-red-500 rounded-full flex justify-center items-center float-left text-center cursor-pointer"
+        class="w-4 h-4  bg-gray-500 rounded-full flex justify-center items-center float-left text-center cursor-pointer"
         @click="nextCurrentDates()"
       >
-        <p>⏭</p>
+        <ArrowRightIcon size="0.75x" />
       </div>
       <br />
     </div>
@@ -78,8 +78,24 @@ import Modal from "./GeneralComponents/Modal.vue";
 import DatePicker from "vue2-datepicker";
 import "vue2-datepicker/index.css";
 
+import {
+  ArrowLeftIcon,
+  ArrowRightIcon,
+  XIcon,
+  PencilIcon,
+  PlusIcon
+} from "@vue-hero-icons/outline";
+
 export default {
-  components: { Modal, DatePicker },
+  components: {
+    Modal,
+    DatePicker,
+    ArrowLeftIcon,
+    ArrowRightIcon,
+    XIcon,
+    PencilIcon,
+    PlusIcon
+  },
   data() {
     return {
       itemsPerRow: 7,
