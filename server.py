@@ -277,7 +277,6 @@ def export():
     outcsv = csv.writer(outfile)
     records = db.engine.execute(
         "SELECT substr(dateObj, 0,11) as date , elapsedTime, learnMethod, comment from post, logentry where logentry.id == post.log_FK_id order by date")
-    # [outcsv.writerow([getattr(curr, column.name) for column in MyTable.__mapper__.columns]) for curr in records]
     outcsv.writerows(records)
 
     outfile.close()

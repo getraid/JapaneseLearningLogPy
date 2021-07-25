@@ -8,8 +8,21 @@
 import BoxElement from "./GeneralComponents/BoxElement.vue";
 export default {
   components: { BoxElement },
-  props: {
-    postObj: null
+  data() {
+    return {
+      postObj: null
+    };
+  },
+  created() {
+    this.$eventbus.$on("currentPost", this.SetCurrentPost);
+  },
+  beforeDestroy() {
+    this.$eventbus.$off("currentPost");
+  },
+  methods: {
+    SetCurrentPost(e) {
+      this.postObj = e;
+    }
   }
 };
 </script>

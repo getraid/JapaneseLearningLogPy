@@ -109,7 +109,9 @@ export default {
   mounted() {
     this.axios.get("/logs").then(response => {
       this.setupLogs(response);
+      this.ClickDate(0);
     });
+
     // maybe convienient if added on startup?
     // this.AddNewDate();
   },
@@ -124,7 +126,8 @@ export default {
   methods: {
     ClickDate(index) {
       this.selectedIndex = index;
-      this.$emit("selectedItem", this.currentDates[this.selectedIndex]);
+      if (this.currentDates != null)
+        this.$emit("selectedItem", this.currentDates[this.selectedIndex]);
     },
     AddNewDate() {
       this.axios.get("/addLog").then(response => {
@@ -159,6 +162,8 @@ export default {
       this.currentDatesIndex = 0;
       this.selectedIndex = 0;
       this.fillCurrentDates();
+      if (this.currentDates != null)
+        this.$emit("selectedItem", this.currentDates[this.selectedIndex]);
     },
 
     nextCurrentDates(decrement) {
@@ -199,7 +204,8 @@ export default {
       this.fillCurrentDates();
 
       this.selectedIndex = 0;
-      this.$emit("selectedItem", this.currentDates[this.selectedIndex]);
+      if (this.currentDates != null)
+        this.$emit("selectedItem", this.currentDates[this.selectedIndex]);
     },
 
     timeConverter(UNIX_timestamp) {

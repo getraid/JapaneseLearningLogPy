@@ -1,8 +1,5 @@
 <template>
   <BoxElement>
-    <div v-if="isLoading">
-      loading...
-    </div>
     <div class="flex flex-wrap -mx-2 overflow-hidden flex-row justify-start">
       <div
         class="my-2 mx-2 overflow-hidden lg:w-1/4 xl:w-1/5 md:w-1/3 w-1/2 flex-grow"
@@ -19,8 +16,21 @@
         </div>
       </div>
 
+      <div
+        v-if="isLoading"
+        class="my-2 px-2 overflow-hidden lg:w-1/4 xl:w-1/5 md:w-1/3 w-1/2 flex-grow"
+      >
+        <div
+          class="bg-gray-300 hover:bg-gray-300  animate-pulse py-6  rounded-md border-2 border-gray-500 text-center flex flex-col items-center cursor-pointer"
+        >
+          <div
+            class="rounded-full w-8 h-8 bg-gray-600 hover:customColor text-center self-center"
+          ></div>
+        </div>
+      </div>
       <!-- Add new element -->
       <div
+        v-else
         class="my-2 px-2 overflow-hidden lg:w-1/4 xl:w-1/5 md:w-1/3 w-1/2 flex-grow"
       >
         <div
@@ -73,14 +83,19 @@ export default {
       this.isLoading = true;
       this.axios.get("/getPosts?logid=" + logid).then(response => {
         this.posts = response.data;
+
         this.isLoading = false;
 
         this.selectedIndex = 0;
+        if (this.posts.length != 0)
+          this.$eventbus.$emit("currentPost", this.posts[0]);
+        else this.$eventbus.$emit("currentPost", null);
       });
     },
 
     ClickPost(index) {
       this.selectedIndex = index;
+      this.$eventbus.$emit("currentPost", this.posts[this.selectedIndex]);
     },
 
     EmitPost(index) {
@@ -88,7 +103,7 @@ export default {
     },
 
     AddNewPost() {
-      this.posts = [];
+      // this.posts = [];
       this.isLoading = true;
 
       const params = new URLSearchParams();
@@ -103,7 +118,8 @@ export default {
         }
       };
       this.axios.post("/addPost", params, config).then(response => {
-        this.posts = response.data;
+        this.posts.push(response.data[response.data.length - 1]);
+        // this.posts = response.data;
         this.isLoading = false;
         this.selectedIndex = this.posts.length - 1;
       });

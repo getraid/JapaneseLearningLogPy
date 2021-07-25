@@ -8,6 +8,8 @@ import "@/assets/css/general.css";
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
 
+Vue.prototype.$eventbus = new Vue(); // Global event bus
+
 // Switch urls between build / dev
 
 if (process.env.NODE_ENV != "production") {
@@ -21,5 +23,5 @@ if (process.env.NODE_ENV != "production") {
 }
 
 new Vue({
-  render: (h) => h(App),
+  render: h => h(App)
 }).$mount("#app");

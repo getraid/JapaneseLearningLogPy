@@ -33,8 +33,8 @@
         <ListLogs v-on:selectedItem="ChangeLog" />
       </div>
       <div class="flex flex-col row-gap-4 col-gap-2 lg:py-2 py-0 flex-grow">
-        <ListPosts :logId="selectedLogId" v-on:selectedPost="ChangePost" />
-        <PropertiesDefiner :postObj="selectedPost" />
+        <ListPosts :logId="selectedLogId" />
+        <PropertiesDefiner />
       </div>
     </div>
   </div>
@@ -49,16 +49,12 @@ export default {
   components: { ListLogs, ListPosts, PropertiesDefiner },
   data() {
     return {
-      selectedLogId: 0,
-      selectedPost: null
+      selectedLogId: 0
     };
   },
   methods: {
     ChangeLog(e) {
       this.selectedLogId = e.id;
-    },
-    ChangePost(e) {
-      this.selectedPost = e;
     }
   }
 };
