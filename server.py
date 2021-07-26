@@ -1,22 +1,16 @@
+import flask
+import configparser
+
 from dataclasses import dataclass
 from datetime import date, datetime
-from enum import unique
-from os import waitpid
 from flask import Flask, jsonify, request
-import flask
 from flask.globals import session
 from flask_sqlalchemy import SQLAlchemy
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
-import time
-import configparser
-import random
-from werkzeug.utils import redirect
 from flask import send_file
-from sqlalchemy import Table, Column, Integer, ForeignKey, desc
+from sqlalchemy import ForeignKey, desc
 from sqlalchemy.orm import relationship
-
-
 from flask_cors import CORS
 
 app = Flask(__name__, static_url_path='',
