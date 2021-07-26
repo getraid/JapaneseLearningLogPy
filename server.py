@@ -191,7 +191,8 @@ def addPost():
 
             row_as_dict = []
             for row in results:
-                row_as_dict.append(dict(row))
+                row_as_dict.append(dict_from_row(row))
+                # row_as_dict.append(dict(row))
 
             # posts = Post.query.all()
             return jsonify(row_as_dict)
@@ -234,7 +235,7 @@ def getPosts():
 
     row_as_dict = []
     for row in results:
-        row_as_dict.append(dict(row))
+        row_as_dict.append(dict_from_row(row))
 
     return jsonify(row_as_dict)
 
@@ -255,10 +256,10 @@ def deleteLog():
                 db.session.commit()
 
                 results = (db.session.query(Post.id, Post.log_FK_id, Post.elapsedTime,
-                           Post.learnMethod, Post.comment).join(LogEntry).filter(LogEntry.id == item.log_FK_id)).all()
+                                            Post.learnMethod, Post.comment).join(LogEntry).filter(LogEntry.id == item.log_FK_id)).all()
                 row_as_dict = []
                 for row in results:
-                    row_as_dict.append(dict(row))
+                    row_as_dict.append(dict_from_row(row))
                 return jsonify(row_as_dict)
 
     return "no item to be deleted"
@@ -277,7 +278,6 @@ def export():
     outcsv = csv.writer(outfile)
     records = db.engine.execute(
         "SELECT substr(dateObj, 0,11) as date , elapsedTime, learnMethod, comment from post, logentry where logentry.id == post.log_FK_id order by date")
-    # [outcsv.writerow([getattr(curr, column.name) for column in MyTable.__mapper__.columns]) for curr in records]
     outcsv.writerows(records)
 
     outfile.close()
@@ -321,6 +321,11 @@ def getLearnMethods():
 
 
 # logic
+
+
+def dict_from_row(row):
+    return dict(zip(row.keys(), row))
+
 
 def checkPassReq():
     cmp1 = bool(str(config['SETTINGS']['usePassword']).lower() == "true")
