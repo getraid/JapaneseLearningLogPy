@@ -1,6 +1,19 @@
 <template>
   <BoxElement>
-    <div>{{ postObj }}</div>
+    <div v-if="postObj != null">
+      <!-- <div>{{ postObj.id }}</div> -->
+      <!-- <div>{{ postObj.log_FK_id }}</div> -->
+
+      <input class="block my-2" type="text" :value="postObj.elapsedTime" />
+      <input class="block my-2" type="text" :value="postObj.learnMethod" />
+      <input class="block my-2" type="text" :value="postObj.comment" />
+      <input
+        class="block my-2"
+        type="button"
+        value="commit"
+        @click="UpdatePost()"
+      />
+    </div>
   </BoxElement>
 </template>
 
@@ -20,6 +33,10 @@ export default {
     this.$eventbus.$off("currentPost");
   },
   methods: {
+    UpdatePost() {
+      //TODO: continue here
+    },
+
     SetCurrentPost(e) {
       this.postObj = e;
     }
