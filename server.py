@@ -1,22 +1,16 @@
+import flask
+import configparser
+
 from dataclasses import dataclass
 from datetime import date, datetime
-from enum import unique
-from os import waitpid
 from flask import Flask, jsonify, request
-import flask
 from flask.globals import session
 from flask_sqlalchemy import SQLAlchemy
 from flask_httpauth import HTTPBasicAuth
 from werkzeug.security import generate_password_hash, check_password_hash
-import time
-import configparser
-import random
-from werkzeug.utils import redirect
 from flask import send_file
-from sqlalchemy import Table, Column, Integer, ForeignKey, desc
+from sqlalchemy import ForeignKey, desc
 from sqlalchemy.orm import relationship
-
-
 from flask_cors import CORS
 
 app = Flask(__name__, static_url_path='',
@@ -191,7 +185,8 @@ def addPost():
 
             row_as_dict = []
             for row in results:
-                row_as_dict.append(dict(row))
+                row_as_dict.append(dict_from_row(row))
+                # row_as_dict.append(dict(row))
 
             # posts = Post.query.all()
             return jsonify(row_as_dict)
@@ -234,7 +229,7 @@ def getPosts():
 
     row_as_dict = []
     for row in results:
-        row_as_dict.append(dict(row))
+        row_as_dict.append(dict_from_row(row))
 
     return jsonify(row_as_dict)
 
@@ -255,10 +250,10 @@ def deleteLog():
                 db.session.commit()
 
                 results = (db.session.query(Post.id, Post.log_FK_id, Post.elapsedTime,
-                           Post.learnMethod, Post.comment).join(LogEntry).filter(LogEntry.id == item.log_FK_id)).all()
+                                            Post.learnMethod, Post.comment).join(LogEntry).filter(LogEntry.id == item.log_FK_id)).all()
                 row_as_dict = []
                 for row in results:
-                    row_as_dict.append(dict(row))
+                    row_as_dict.append(dict_from_row(row))
                 return jsonify(row_as_dict)
 
     return "no item to be deleted"
@@ -320,6 +315,11 @@ def getLearnMethods():
 
 
 # logic
+
+
+def dict_from_row(row):
+    return dict(zip(row.keys(), row))
+
 
 def checkPassReq():
     cmp1 = bool(str(config['SETTINGS']['usePassword']).lower() == "true")
