@@ -61,11 +61,11 @@ export default {
       currentSelectedPost: 0,
       posts: [],
       isLoading: true,
-      selectedIndex: 0
+      selectedIndex: 0,
     };
   },
   props: {
-    logId: null
+    logId: null,
   },
 
   watch: {
@@ -75,13 +75,13 @@ export default {
     }, // eslint-disable-next-line
     selectedIndex: function(newVal, oldVal) {
       this.EmitPost(newVal);
-    }
+    },
   },
   methods: {
     FetchPosts(logid) {
       this.posts = [];
       this.isLoading = true;
-      this.axios.get("/getPosts?logid=" + logid).then(response => {
+      this.axios.get("/getPosts?logid=" + logid).then((response) => {
         this.posts = response.data;
 
         this.isLoading = false;
@@ -114,17 +114,17 @@ export default {
 
       const config = {
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded"
-        }
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
       };
-      this.axios.post("/addPost", params, config).then(response => {
+      this.axios.post("/addPost", params, config).then((response) => {
         this.posts.push(response.data[response.data.length - 1]);
         // this.posts = response.data;
         this.isLoading = false;
         this.selectedIndex = this.posts.length - 1;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 

@@ -7,12 +7,13 @@
       <input class="block my-2" type="text" :value="postObj.elapsedTime" />
       <input class="block my-2" type="text" :value="postObj.learnMethod" />
       <input class="block my-2" type="text" :value="postObj.comment" />
-      <input
-        class="block my-2"
-        type="button"
-        value="commit"
+
+      <button
+        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
         @click="UpdatePost()"
-      />
+      >
+        Button
+      </button>
     </div>
   </BoxElement>
 </template>
@@ -23,7 +24,7 @@ export default {
   components: { BoxElement },
   data() {
     return {
-      postObj: null
+      postObj: null,
     };
   },
   created() {
@@ -34,13 +35,34 @@ export default {
   },
   methods: {
     UpdatePost() {
-      //TODO: continue here
+      this.isLoading = true;
+
+      const params = new URLSearchParams();
+      params.append("id", this.postObj.id);
+      params.append("logid", this.postObj.log_FK_id);
+      params.append("elapsedTime", this.postObj.elapsedTime);
+      params.append("learnMethod", this.postObj.learnMethod);
+      params.append("comment", this.postObj.comment);
+
+      const config = {
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      };
+      this.axios.patch("/addPost", params, config).then((response) => {
+        console.log(response);
+        // this.posts.push(response.data[response.data.length - 1]);
+        // // this.posts = response.data;
+        // this.isLoading = false;
+        // this.selectedIndex = this.posts.length - 1;
+      });
     },
 
     SetCurrentPost(e) {
+      console.log(e);
       this.postObj = e;
-    }
-  }
+    },
+  },
 };
 </script>
 
