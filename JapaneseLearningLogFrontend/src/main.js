@@ -21,7 +21,15 @@ if (process.env.NODE_ENV != "production") {
     Vue.axios.defaults.port = 5000;
   }
 }
-
+/** Vue Filters Start */
+Vue.filter('truncate', function (text, length, suffix) {
+  if (text.length > length) {
+      return text.substring(0, length) + suffix;
+  } else {
+      return text;
+  }
+});
+/** Vue Filters End */
 new Vue({
   render: h => h(App)
 }).$mount("#app");

@@ -4,22 +4,35 @@
       <!-- <div>{{ postObj.id }}</div> -->
       <!-- <div>{{ postObj.log_FK_id }}</div> -->
 
-      <input class="block my-2" type="text" :value="postObj.elapsedTime" />
-      <input class="block my-2" type="text" :value="postObj.learnMethod" />
-      <input class="block my-2" type="text" :value="postObj.comment" />
+      <input class="block my-2" type="text" v-model="postObj.elapsedTime" />
+      <input class="block my-2" type="text" v-model="postObj.learnMethod" />
+                <textarea class="w-full px-3 py-2 text-gray-700 border rounded-lg focus:outline-none" rows="4" v-model="postObj.comment" ></textarea>
+
 
       <button
-        class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        @click="Revert()"
+      >
+        Cancel
+      </button>      <button
+        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        @click="DeletePost()"
+      >
+        Delete
+      </button>
+     
+      <button
+        class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 mx-4 px-4 rounded"
         @click="UpdatePost()"
       >
-        Button
+        Save
       </button>
     </div>
   </BoxElement>
 </template>
 
 <script>
-import BoxElement from "./GeneralComponents/BoxElement.vue";
+import BoxElement from "./GeneralComponents/SmallBox.vue";
 export default {
   components: { BoxElement },
   data() {
@@ -36,7 +49,7 @@ export default {
   methods: {
     UpdatePost() {
       this.isLoading = true;
-
+      console.log("w");
       const params = new URLSearchParams();
       params.append("id", this.postObj.id);
       params.append("logid", this.postObj.log_FK_id);
@@ -56,6 +69,18 @@ export default {
         // this.isLoading = false;
         // this.selectedIndex = this.posts.length - 1;
       });
+    },
+    DeletePost()
+    {
+      
+      this.axios.get("/deletePost?id=" + this.postObj.id).then(() => {
+        this.Revert();
+      });
+
+    },
+    Revert() {
+     this.$eventbus.$emit("reloadentrys");  
+
     },
 
     SetCurrentPost(e) {

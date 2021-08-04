@@ -12,7 +12,9 @@
           class=" hover:bg-orange-300 text-center py-8 rounded-md cursor-pointer"
           @click="ClickPost(index)"
         >
-          {{ item.learnMethod }}
+          <p class="text-xl">{{ item.learnMethod }}</p>
+          <p class="whitespace-pre"> {{ timeConvert(item.elapsedTime) }}</p>
+          <small class="whitespace-pre  line-clamp-1 text-gray-800"> {{ item.comment | truncate(30, '...') }}</small>
         </div>
       </div>
 
@@ -67,6 +69,12 @@ export default {
   props: {
     logId: null,
   },
+  created() {
+    this.$eventbus.$on("reloadentrys", this.Reload);
+  },
+  beforeDestroy() {
+    this.$eventbus.$off("reloadentrys");
+  },
 
   watch: {
     // eslint-disable-next-line
@@ -78,6 +86,9 @@ export default {
     },
   },
   methods: {
+    Reload() {
+      this.FetchPosts(this.logId);
+    },
     FetchPosts(logid) {
       this.posts = [];
       this.isLoading = true;
@@ -101,7 +112,31 @@ export default {
     EmitPost(index) {
       this.$emit("selectedPost", this.posts[index]);
     },
+    timeConvert(n) {
+      var num = n;
+      var hours = num / 60;
+      var rhours = Math.floor(hours);
+      var minutes = (hours - rhours) * 60;
+      var rminutes = Math.round(minutes);
 
+      if (rhours == 0 && rminutes == 0) {
+        return "";
+      } else if (rhours == 0 && rminutes == 1) {
+        return rminutes + " minute";
+      }else if (rhours == 0 && rminutes >= 1) {
+        return rminutes + " minutes";
+      }else if (rhours ==1 && rminutes == 0) {
+        return rhours + " hour"
+      }else if (rhours >=1 && rminutes == 0) {
+        return rhours + " hours"
+      }else if (rhours ==1 && rminutes == 1) {
+        return rhours + " hour and " + rminutes + " minute";
+      }else if (rhours >=1 && rminutes == 1) {
+        return rhours + " hours and " + rminutes + " minute";
+      }else if (rhours >=1 && rminutes >= 1) {
+        return rhours + " hours and " + rminutes + " minutes";
+      }
+    },
     AddNewPost() {
       // this.posts = [];
       this.isLoading = true;
@@ -122,6 +157,7 @@ export default {
         // this.posts = response.data;
         this.isLoading = false;
         this.selectedIndex = this.posts.length - 1;
+        this.$eventbus.$emit("currentPost", this.posts[this.selectedIndex]);
       });
     },
   },

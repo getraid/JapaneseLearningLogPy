@@ -213,6 +213,7 @@ export default {
       return a.toLocaleDateString(
         navigator.language || navigator.userLanguage,
         {
+          timeZone: 'UTC',
           weekday: "long",
           year: "numeric",
           month: "2-digit",
