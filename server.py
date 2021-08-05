@@ -17,7 +17,7 @@ app = Flask(__name__, static_url_path='',
             static_folder='static')
 auth = HTTPBasicAuth()
 
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///database/database.db'
 db = SQLAlchemy(app)
 
 # TODO: remove allow all cors, once GUI development finishes or allow in other branch
@@ -39,7 +39,7 @@ config['SETTINGS'] = {
 
 # user config
 # Overwrites local config with file (if exists)
-config.read('config.ini')
+config.read('config/config.ini')
 
 users = {
     str(config['SETTINGS']['user']): generate_password_hash(str(config['SETTINGS']['unlock_password'])),

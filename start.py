@@ -5,7 +5,7 @@ import server
 from server import config, app
 
 if __name__ == '__main__':
-    if(not os.path.exists("database.db")):
+    if(not os.path.exists("database/database.db")):
         import createDatabase
 
     # get port / host from config
