@@ -13,8 +13,11 @@
           @click="ClickPost(index)"
         >
           <p class="text-xl">{{ item.learnMethod }}</p>
-          <p class="whitespace-pre"> {{ timeConvert(item.elapsedTime) }}</p>
-          <small class="whitespace-pre  line-clamp-1 text-gray-800"> {{ item.comment | truncate(30, '...') }}</small>
+          <span class="whitespace-pre">{{ timeConvert(item.elapsedTime) }}</span
+          ><br />
+          <small class="whitespace-pre  line-clamp-1 text-gray-800">
+            {{ item.comment | truncate(30, "...") }}</small
+          >
         </div>
       </div>
 
@@ -33,10 +36,10 @@
       <!-- Add new element -->
       <div
         v-else
-        class="my-2 px-2 overflow-hidden lg:w-1/4 xl:w-1/5 md:w-1/3 w-1/2 flex-grow"
+        class="m-2 overflow-hidden lg:w-1/4 xl:w-1/5 md:w-1/3 w-1/2 flex-grow"
       >
         <div
-          class="customColor hover:bg-jlOrange  py-6  rounded-md border-2 border-orange-500 text-center flex flex-col items-center cursor-pointer"
+          class="customColor hover:bg-jlOrange  customPadding rounded-md border-2 border-orange-500 text-center flex flex-col items-center cursor-pointer"
           @click="AddNewPost()"
         >
           <div
@@ -123,17 +126,17 @@ export default {
         return "";
       } else if (rhours == 0 && rminutes == 1) {
         return rminutes + " minute";
-      }else if (rhours == 0 && rminutes >= 1) {
+      } else if (rhours == 0 && rminutes >= 1) {
         return rminutes + " minutes";
-      }else if (rhours ==1 && rminutes == 0) {
-        return rhours + " hour"
-      }else if (rhours >=1 && rminutes == 0) {
-        return rhours + " hours"
-      }else if (rhours ==1 && rminutes == 1) {
+      } else if (rhours == 1 && rminutes == 0) {
+        return rhours + " hour";
+      } else if (rhours >= 1 && rminutes == 0) {
+        return rhours + " hours";
+      } else if (rhours == 1 && rminutes == 1) {
         return rhours + " hour and " + rminutes + " minute";
-      }else if (rhours >=1 && rminutes == 1) {
+      } else if (rhours >= 1 && rminutes == 1) {
         return rhours + " hours and " + rminutes + " minute";
-      }else if (rhours >=1 && rminutes >= 1) {
+      } else if (rhours >= 1 && rminutes >= 1) {
         return rhours + " hours and " + rminutes + " minutes";
       }
     },
@@ -165,6 +168,10 @@ export default {
 </script>
 
 <style>
+.customPadding {
+  padding-top: 3.15rem;
+  padding-bottom: 3.15rem;
+}
 .customColor {
   background-color: rgba(243, 102, 8, 0.158);
 }
