@@ -2,11 +2,14 @@ import Vue from "vue";
 import App from "./App.vue";
 import axios from "axios";
 import VueAxios from "vue-axios";
+import VueBootstrapTypeahead from "vue-bootstrap-typeahead";
 import "@/assets/css/tailwind.css";
 import "@/assets/css/general.css";
 
 Vue.config.productionTip = false;
 Vue.use(VueAxios, axios);
+
+Vue.component("vue-bootstrap-typeahead", VueBootstrapTypeahead);
 
 Vue.prototype.$eventbus = new Vue(); // Global event bus
 
@@ -22,14 +25,14 @@ if (process.env.NODE_ENV != "production") {
   }
 }
 /** Vue Filters Start */
-Vue.filter('truncate', function (text, length, suffix) {
+Vue.filter("truncate", function(text, length, suffix) {
   if (text.length > length) {
-      return text.substring(0, length) + suffix;
+    return text.substring(0, length) + suffix;
   } else {
-      return text;
+    return text;
   }
 });
 /** Vue Filters End */
 new Vue({
-  render: h => h(App)
+  render: (h) => h(App),
 }).$mount("#app");
