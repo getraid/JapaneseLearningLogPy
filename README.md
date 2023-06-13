@@ -1,5 +1,7 @@
 # Japanese Learning Log Py
 
+![Image that shows a jll page](./.github/readme-images/JLL.png)
+
 Required / Programmed with: Python 3.9
 
 ## Setup 
