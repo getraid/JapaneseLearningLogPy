@@ -2,7 +2,7 @@
 
 ![Image that shows a jll page](./.github/readme-images/JLL.png)
 
-Required / Programmed with: Python 3.9
+Required / Programmed with: Python 3.9, Node v12
 
 ## Setup 
 Clone the repository to your server with `git clone http://codeserver/rapidraid/JapaneseLearningLogPy.git`
