@@ -3,6 +3,10 @@
 ![Image that shows a jll page](./.github/readme-images/JLL.png)
 
 Required / Programmed with: Python 3.9, Node v12
+<details> 
+  <summary>Newer versions? </summary>
+    If you want use newer versions, look into the installAndBuild.sh/bat files and use the commented segments instead
+</details>
 
 ## Setup 
 Clone the repository to your server with `git clone http://codeserver/rapidraid/JapaneseLearningLogPy.git`
