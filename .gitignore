@@ -145,3 +145,4 @@ cython_debug/
 static/fonts/
 static/
 .DS_Store
+.vscode/settings.json
