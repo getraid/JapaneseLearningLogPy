@@ -258,6 +258,13 @@ def deleteLog():
 
     return "no item to be deleted"
 
+@app.route("/exportDatabase")
+def exportDB():
+    if(not isLoggedIn() and checkPassReq()):
+        return flask.redirect('/login')
+
+    return send_file('./database/database.db', as_attachment=True)
+
 
 @app.route("/export")
 def export():
